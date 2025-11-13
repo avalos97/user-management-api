@@ -2,7 +2,7 @@ package com.nisum.usermanagement.application.service;
 
 import com.nisum.usermanagement.application.dto.LoginRequest;
 import com.nisum.usermanagement.application.dto.LoginResponse;
-import com.nisum.usermanagement.application.exception.UserNotFoundException;
+import com.nisum.usermanagement.application.exception.InvalidCredentialsException;
 import com.nisum.usermanagement.domain.model.aggregate.User;
 import com.nisum.usermanagement.domain.model.vo.Email;
 import com.nisum.usermanagement.domain.model.vo.JwtToken;
@@ -30,10 +30,10 @@ public class AuthService {
         
         User user = userRepository.findByEmail(email)
                 .filter(User::isActive)
-                .orElseThrow(() -> new UserNotFoundException(email.getValue()));
+                .orElseThrow(() -> new InvalidCredentialsException("Credenciales inválidas"));
         
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            throw new IllegalArgumentException("Credenciales inválidas");
+            throw new InvalidCredentialsException("Credenciales inválidas");
         }
         
         String tokenValue = jwtService.generateToken(user.getEmail().getValue());

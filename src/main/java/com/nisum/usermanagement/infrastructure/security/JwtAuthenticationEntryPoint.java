@@ -11,7 +11,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,11 +43,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
 
         Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("timestamp", LocalDateTime.now().toString());
-        errorResponse.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-        errorResponse.put("error", "Unauthorized");
-        errorResponse.put("message", "Autenticación requerida. Token JWT inválido o ausente.");
-        errorResponse.put("path", request.getRequestURI());
+        errorResponse.put("mensaje", "Autenticación requerida. Token JWT inválido o ausente.");
 
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }

@@ -49,7 +49,7 @@ flowchart TB
 - Lombok
 - JUnit 5, Mockito
 
-## Patrones de Diseno Implementados
+## Patrones de Diseño Implementados
 
 1. **Aggregate Root**: User como raiz del agregado que contiene Phone entities
 2. **Value Object**: Email y JwtToken como objetos inmutables con validacion
@@ -58,6 +58,7 @@ flowchart TB
 5. **Factory Method**: Creacion de agregados con invariantes garantizadas
 6. **Mapper**: Traduccion entre DTOs y entidades de dominio
 7. **Adapter**: UserRepositoryJpaAdapter implementa el puerto del dominio
+8. **Builder**: Para creacion de objetos complejos
 
 ## Principios SOLID Aplicados
 
@@ -69,25 +70,77 @@ flowchart TB
 
 ## Requisitos
 
+### Desarrollo Local
 - Java 17+
 - Maven 3.6+
 
+### Despliegue con Docker
+- Docker 20.10+
+- Docker Compose 2.0+
+
 ## Instalacion y Ejecucion
 
-### 1. Clonar el proyecto
+### Opción 1: Despliegue con Docker
+
+#### 1. Clonar el proyecto
 
 ```bash
 git clone <repository-url>
 cd user-management-api
 ```
 
-### 2. Compilar el proyecto
+#### 2. Crear directorio de logs
+
+```bash
+mkdir -p logs
+```
+
+#### 3. Construir e iniciar la aplicación
+
+```bash
+docker-compose up -d --build
+```
+
+#### 4. Comandos útiles de Docker Compose
+
+```bash
+# Ver estado de los servicios
+docker-compose ps
+
+# Ver logs en tiempo real
+docker-compose logs -f user-management-api
+
+# Ver logs de todos los servicios
+docker-compose logs -f
+
+# Reiniciar la aplicación
+docker-compose restart user-management-api
+
+# Detener todos los servicios
+docker-compose down
+```
+
+**La aplicación estará disponible en:**
+- **API**: `http://localhost:8080`
+- **Swagger UI**: `http://localhost:8080/swagger-ui.html`
+- **H2 Console**: `http://localhost:8080/h2-console`
+- **Health Check**: `http://localhost:8080/actuator/health`
+### Opción 2: Ejecución Local (Desarrollo)
+
+#### 1. Clonar el proyecto
+
+```bash
+git clone <repository-url>
+cd user-management-api
+```
+
+#### 2. Compilar el proyecto
 
 ```bash
 mvn clean install
 ```
 
-### 3. Ejecutar la aplicacion
+#### 3. Ejecutar la aplicacion
 
 ```bash
 mvn spring-boot:run
@@ -138,9 +191,17 @@ Response (201):
 }
 ```
 
-Errores:
-- **409**: `{"mensaje": "El correo ya se encuentra registrado"}`
-- **400**: `{"mensaje": "Formato de correo invalido"}` o `{"mensaje": "Formato de contraseña invalido"}`
+**Errores Posibles:**
+- **409 Conflict**: 
+  - `{"mensaje": "El correo ya se encuentra registrado"}`
+- **400 Bad Request**: 
+  - `{"mensaje": "Formato de correo inválido"}`
+  - `{"mensaje": "Formato de contraseña inválido"}`
+  - `{"mensaje": "La contraseña no puede estar vacía"}`
+  - `{"mensaje": "El nombre es obligatorio"}`
+  - `{"mensaje": "El correo es obligatorio"}`
+- **500 Internal Server Error**: 
+  - `{"mensaje": "Error interno del servidor"}`
 
 ### 2. Login
 
@@ -162,6 +223,15 @@ Response (200):
 }
 ```
 
+**Errores Posibles:**
+- **400 Bad Request**: 
+  - `{"mensaje": "Formato de correo inválido"}`
+  - `{"mensaje": "El correo es obligatorio"}`
+  - `{"mensaje": "La contraseña es obligatoria"}`
+- **401 Unauthorized**: 
+  - `{"mensaje": "Credenciales inválidas"}`
+- **500 Internal Server Error**: `{"mensaje": "Error interno del servidor"}`
+
 ### 3. Obtener Usuario por ID
 
 **GET** `/api/v1/users/{id}`
@@ -172,6 +242,25 @@ Authorization: Bearer <token>
 ```
 
 Response (200): Mismo formato que el registro
+
+**Errores Posibles:**
+- **401 Unauthorized**: `{"mensaje": "Autenticación requerida. Token JWT inválido o ausente."}`
+- **403 Forbidden**: `{"mensaje": "No tienes permisos para acceder a este recurso."}`
+- **404 Not Found**: `{"mensaje": "Usuario con ID {id} no encontrado"}`
+- **500 Internal Server Error**: `{"mensaje": "Error interno del servidor"}`
+
+## Códigos de Estado HTTP
+
+La API utiliza los siguientes códigos de estado HTTP:
+
+- **200 OK**: Operación exitosa (Login, Get User)
+- **201 Created**: Usuario registrado exitosamente
+- **400 Bad Request**: Error en los datos enviados (validación, formato)
+- **401 Unauthorized**: Token JWT ausente, inválido o expirado
+- **403 Forbidden**: Usuario autenticado pero sin permisos suficientes
+- **404 Not Found**: Recurso no encontrado (usuario no existe)
+- **409 Conflict**: Conflicto con el estado actual (email duplicado)
+- **500 Internal Server Error**: Error interno del servidor
 
 ## Documentacion de API (Swagger)
 

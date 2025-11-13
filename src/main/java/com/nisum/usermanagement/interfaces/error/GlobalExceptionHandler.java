@@ -1,6 +1,7 @@
 package com.nisum.usermanagement.interfaces.error;
 
 import com.nisum.usermanagement.application.exception.DuplicateEmailException;
+import com.nisum.usermanagement.application.exception.InvalidCredentialsException;
 import com.nisum.usermanagement.application.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleUserNotFound(UserNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(new ApiError(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ApiError> handleInvalidCredentials(InvalidCredentialsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiError(ex.getMessage()));
     }
 

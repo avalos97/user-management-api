@@ -11,7 +11,6 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,11 +41,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 403
 
         Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("timestamp", LocalDateTime.now().toString());
-        errorResponse.put("status", HttpServletResponse.SC_FORBIDDEN);
-        errorResponse.put("error", "Forbidden");
-        errorResponse.put("message", "No tienes permisos para acceder a este recurso.");
-        errorResponse.put("path", request.getRequestURI());
+        errorResponse.put("mensaje", "No tienes permisos para acceder a este recurso.");
 
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
