@@ -40,7 +40,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 authException.getMessage());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("mensaje", "Autenticación requerida. Token JWT inválido o ausente.");

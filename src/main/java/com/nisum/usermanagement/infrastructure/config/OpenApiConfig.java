@@ -16,7 +16,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("User Management API")
                         .version("1.0")
-                        .description("API RESTful de creacion y gestion de usuarios con DDD"))
+                        .description("API RESTful de creacion y gestion de usuarios"))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new io.swagger.v3.oas.models.Components()
                         .addSecuritySchemes("bearerAuth",

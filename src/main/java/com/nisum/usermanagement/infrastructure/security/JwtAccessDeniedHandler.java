@@ -38,7 +38,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
                 accessDeniedException.getMessage());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 403
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("mensaje", "No tienes permisos para acceder a este recurso.");

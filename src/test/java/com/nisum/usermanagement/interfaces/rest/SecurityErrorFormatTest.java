@@ -12,9 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-/**
- * Test de integración para verificar los formatos de error de autenticación y autorización
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 class SecurityErrorFormatTest {
