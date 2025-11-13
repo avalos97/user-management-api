@@ -45,7 +45,7 @@ flowchart TB
 - Spring Security
 - H2 Database (en memoria)
 - JWT (jjwt 0.11.5)
-- SpringDoc OpenAPI 2.6.0
+- SpringDoc OpenAPI 2.7.0
 - Lombok
 - JUnit 5, Mockito
 
